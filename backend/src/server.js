@@ -1,8 +1,10 @@
 import express from "express"
 import cors from "cors";
+import { connectDB } from "./lib/db.js";
 
 
 import { ENV } from "./lib/env.js"
+import { connect } from "mongoose";
 const app = express()
 app.use(cors());
 
@@ -20,4 +22,15 @@ app.get("/health" , (req,res) => {
 
 //note- "we cam also use nodemon for development, but it needs to be installed globally or as a dev dependency"//
 
-app.listen(ENV.PORT, () => console.log("server is running", ENV.PORT));
+const startServer = async () => {
+    try {
+        await connectDB();
+app.listen(ENV.PORT, () => 
+  console.log("server is running", ENV.PORT));
+    } catch (error) {
+console.error("Error while starting the server", error);
+
+    }
+};
+
+startServer();

@@ -1,29 +1,29 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-
+import { SignInButton } from "@clerk/clerk-react";
+import { SignOutButton } from "@clerk/clerk-react";
+import { SignedOut } from "@clerk/clerk-react";
+import { SignedIn } from "@clerk/clerk-react";
+import { UserButton } from "@clerk/clerk-react";
 function App() {
-  const [message, setMessage] = useState("Loading...");
-
-  useEffect(() => {
-    const API_URL = import.meta.env.VITE_API_URL;
-
-    fetch(`${API_URL}/health`)
-      .then((res) => res.json())
-      .then((data) => {
-        setMessage(data.message);
-      })
-      .catch((err) => {
-        console.error("Error connecting to backend:", err);
-        setMessage("Backend connection failed");
-      });
-  }, []);
-
+  
   return (
+    
     <>
-      <h1>Frontend Connected ✅</h1>
-      <h2>{message}</h2>
-    </>
+  <h1>Welcome to the app</h1>
+
+  <SignedOut>
+    <SignInButton mode="modal">
+      <button>Log in</button>
+    </SignInButton>
+  </SignedOut>
+
+  <SignedIn>
+    <SignOutButton />
+    <UserButton />
+  </SignedIn>
+</>
+
   );
 }
-
 export default App;

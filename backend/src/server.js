@@ -3,6 +3,7 @@ import cors from "cors";
 
 
 import { ENV } from "./lib/env.js"
+import { connect } from "mongoose";
 const app = express()
 app.use(cors());
 
@@ -20,4 +21,7 @@ app.get("/health" , (req,res) => {
 
 //note- "we cam also use nodemon for development, but it needs to be installed globally or as a dev dependency"//
 
-app.listen(ENV.PORT, () => console.log("server is running", ENV.PORT));
+app.listen(ENV.PORT, () => {
+  console.log("server is running", ENV.PORT);
+  connectDB();
+});

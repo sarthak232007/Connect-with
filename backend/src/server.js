@@ -3,6 +3,8 @@ import cors from "cors";
 import { connectDB } from "./lib/db.js";
 import path from "path";
 import { serve} from "inngest/express"
+import { inngest, functions } from "./lib/inngest.js";
+
 app.use("/api/inngest", serve({ client: inngest, functions }));
 
 

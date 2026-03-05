@@ -3,8 +3,7 @@ import cors from "cors";
 import { connectDB } from "./lib/db.js";
 import path from "path";
 import { serve} from "inngest/express"
-import { inngest } from "./lib/inngest.js";
-import { functions } from "./lib/functions.js";
+app.use("/api/inngest", serve({ client: inngest, functions }));
 
 
 import { ENV } from "./lib/env.js"
@@ -36,6 +35,13 @@ console.log(ENV.DB_URL);
 app.get("/health" , (req,res) => {
     res.status(200).json({message: "Hello api"})
 })
+
+app.get("/", (req, res) => {
+  res.send("Backend running");
+});
+
+
+
 
 //note- "we cam also use nodemon for development, but it needs to be installed globally or as a dev dependency"//
 

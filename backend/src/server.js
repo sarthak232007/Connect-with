@@ -1,18 +1,35 @@
 import express from "express"
 import cors from "cors";
 import { connectDB } from "./lib/db.js";
+import path from "path";
+import { serve} from "inngest/express"
+import { inngest } from "./lib/inngest.js";
+import { functions } from "./lib/functions.js";
 
 
 import { ENV } from "./lib/env.js"
 import { connect } from "mongoose";
-const app = express()
-app.use(cors());
 
 
 
+const __dirname = path.resolve();
+const app = express();
 
-     console.log(ENV.PORT);
-     console.log(ENV.DB_URL); 
+
+// middleware
+
+
+app.use(express.json());
+//here credentials is set to true because we know that we will be sending cookies from the client to the server and we want to allow that.
+
+
+app.use(cors({origin:ENV.CLIENT_URL,credentials:true}));
+
+ app.use("/api/inngest", serve({ client: inngest, functions }));
+
+
+console.log(ENV.PORT);
+console.log(ENV.DB_URL); 
 
 
 

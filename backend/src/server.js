@@ -1,53 +1,57 @@
-import express from "express"
+import express from "express";
 import cors from "cors";
-import { connectDB } from "./lib/db.js";
 import path from "path";
-import { serve} from "inngest/express"
-import { inngest } from "./lib/inngest.js";
-import { functions } from "./lib/functions.js";
+import { serve } from "inngest/express";
 
-
-import { ENV } from "./lib/env.js"
-import { connect } from "mongoose";
-
-
+import { connectDB } from "./lib/db.js";
+import { ENV } from "./lib/env.js";
+import { inngest, functions } from "./lib/inngest.js";
 
 const __dirname = path.resolve();
+
+// create express app FIRST
 const app = express();
 
 
-// middleware
-
+// ---------------- MIDDLEWARE ----------------
 
 app.use(express.json());
-//here credentials is set to true because we know that we will be sending cookies from the client to the server and we want to allow that.
+
+app.use(cors({
+  origin: ENV.CLIENT_URL,
+  credentials: true
+}));
 
 
-app.use(cors({origin:ENV.CLIENT_URL,credentials:true}));
+// ---------------- INNGEST ROUTE ----------------
 
- app.use("/api/inngest", serve({ client: inngest, functions }));
-
-
-console.log(ENV.PORT);
-console.log(ENV.DB_URL); 
+app.use("/api/inngest", serve({ client: inngest, functions }));
 
 
+// ---------------- TEST ROUTES ----------------
 
-app.get("/health" , (req,res) => {
-    res.status(200).json({message: "Hello api"})
-})
+app.get("/health", (req, res) => {
+  res.status(200).json({ message: "Hello api" });
+});
 
-//note- "we cam also use nodemon for development, but it needs to be installed globally or as a dev dependency"//
+app.get("/", (req, res) => {
+  res.send("Backend running");
+});
+
+
+// ---------------- SERVER START ----------------
 
 const startServer = async () => {
-    try {
-        await connectDB();
-app.listen(ENV.PORT, () => 
-  console.log("server is running", ENV.PORT));
-    } catch (error) {
-console.error("Error while starting the server", error);
+  try {
+    await connectDB();
 
-    }
+    app.listen(ENV.PORT, () => {
+      console.log("Server is running on port:", ENV.PORT);
+    });
+
+  } catch (error) {
+    console.error("Error while starting the server", error);
+  }
 };
 
 startServer();

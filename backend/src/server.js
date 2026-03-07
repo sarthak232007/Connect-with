@@ -10,6 +10,7 @@ import { connectDB } from "./lib/db.js";
 
 import { inngest, functions } from "./lib/inngest.js";
 import chatRoutes from "./routes/chatRoutes.js";  
+import sessionRoutes from "./routes/sessionRoutes.js";
 
 
 
@@ -34,6 +35,8 @@ app.use(cors({
 app.use(clerkMiddleware( ));// this adds auth field to reques object: req.auth()
 
 
+
+
 // INNGEST ROUTE 
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
@@ -43,7 +46,7 @@ app.use("/api/inngest", serve({ client: inngest, functions }));
 // when you pass an array of middleware to express , it automatically flattens and executes them sequwntially, one by one.
 
 app.use("/api/chat", chatRoutes)
-
+app.use("/api/sessions", chatRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend running");

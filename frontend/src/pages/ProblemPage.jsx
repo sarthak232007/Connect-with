@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import { PROBLEMS } from "../data/problemsData";
 import Navbar from "../components/Navbar";
 
-import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
+import { Panel, Group, Separator } from "react-resizable-panels";
 
 
 import ProblemDescription from "../components/ProblemDescription";

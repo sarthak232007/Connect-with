@@ -3,20 +3,33 @@ import Session from "../models/Session.js";
 
 export async function createSession(req, res) {
   try {
+    console.log("createSession called", {
+      body: req.body,
+      user: req.user ? { id: req.user._id, clerkId: req.user.clerkId } : null,
+    });
+
     const { problem, difficulty } = req.body;
-    const userId = req.user._id;
-    const clerkId = req.user.clerkId;
+    const userId = req.user?._id;
+    const clerkId = req.user?.clerkId;
 
     if (!problem || !difficulty) {
       return res.status(400).json({ message: "Problem and difficulty are required" });
     }
 
+    if (!userId || !clerkId) {
+      return res.status(401).json({ message: "Unauthorized - no user attached" });
+    }
+
     // generate a unique call id for stream video
     const callId = `session_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    console.log("Generated callId:", callId);
 
+    console.log("Creating session in DB...");
     // create session in db
     const session = await Session.create({ problem, difficulty, host: userId, callId });
+    console.log("Session created:", session._id);
 
+    console.log("Creating Stream video call...");
     // create stream video call
     await streamClient.video.call("default", callId).getOrCreate({
       data: {
@@ -24,7 +37,9 @@ export async function createSession(req, res) {
         custom: { problem, difficulty, sessionId: session._id.toString() },
       },
     });
+    console.log("Stream video call created");
 
+    console.log("Creating Stream chat channel...");
     // chat messaging
     const channel = chatClient.channel("messaging", callId, {
       name: `${problem} Session`,
@@ -33,10 +48,12 @@ export async function createSession(req, res) {
     });
 
     await channel.create();
+    console.log("Stream chat channel created");
 
     res.status(201).json({ session });
   } catch (error) {
     console.log("Error in createSession controller:", error.message);
+    console.log("Full error:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 }

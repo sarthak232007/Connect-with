@@ -3,7 +3,7 @@ import {
   ArrowRightIcon,
   CheckIcon,
   Code2Icon,
-  CableIcon,
+
   UsersIcon,
   VideoIcon,
   ZapIcon,

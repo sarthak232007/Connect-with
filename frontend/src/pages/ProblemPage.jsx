@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { PROBLEMS } from "../Data/problems";
+import { PROBLEMS } from "../data/problemsData";
 import Navbar from "../components/Navbar";
 
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";

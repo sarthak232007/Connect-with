@@ -46,7 +46,7 @@ app.use("/api/inngest", serve({ client: inngest, functions }));
 // when you pass an array of middleware to express , it automatically flattens and executes them sequwntially, one by one.
 
 app.use("/api/chat", chatRoutes)
-app.use("/api/sessions", chatRoutes);
+app.use("/api/sessions", sessionRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend running");

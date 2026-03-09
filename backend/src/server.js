@@ -36,7 +36,10 @@ app.use(clerkMiddleware( ));// this adds auth field to reques object: req.auth()
 
 
 
-
+app.use((req, res, next) => {
+  console.log("Incoming request:", req.method, req.url, req.body);
+  next();
+});
 // INNGEST ROUTE 
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
